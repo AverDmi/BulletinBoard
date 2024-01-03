@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">BulletinBoard</string>
+
+    <string name="ads">Объявления</string>
+    <string name="my_ads">Мои объявления</string>
+    <string name="cars">Машины</string>
+    <string name="pc">Компьютеры</string>
+    <string name="smartphones">Смартфоны</string>
+    <string name="appliances">Бытовая техника</string>
+
+    <string name="account">Аккаунт</string>
+    <string name="sign_up">Регистрация</string>
+    <string name="sign_in">Вход</string>
+    <string name="sign_out">Выход</string>
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
 </resources>
