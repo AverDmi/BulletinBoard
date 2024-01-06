@@ -26,5 +26,7 @@
     <string name="sign_in_error">Не удалось войти</string>
     <string name="send_verification_email_error">Не удалось отправить email для подтверждения</string>
     <string name="send_verification_email_success">На Вашу почту было отправлено письмо...</string>
+    <string name="email_reset_password_was_sent">Reset Email was sent!</string>
+    <string name="dialog_reset_email_message">Для восстановления пароля укажите Ваш email</string>
 
 </resources>

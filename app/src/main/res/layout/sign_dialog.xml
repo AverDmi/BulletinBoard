@@ -22,14 +22,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="@string/email_hint"
         android:inputType="text|textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_title_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/dialog_message_tv" />
 
     <EditText
         android:id="@+id/sign_password_ed"
@@ -65,4 +65,18 @@
         app:layout_constraintEnd_toEndOf="@+id/sign_email_ed"
         app:layout_constraintStart_toStartOf="@+id/sign_email_ed"
         app:layout_constraintTop_toBottomOf="@+id/sign_up_in_btn" />
+
+    <TextView
+        android:id="@+id/dialog_message_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal"
+        android:text="@string/dialog_reset_email_message"
+        android:textColor="#FB0014"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/sign_email_ed"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@+id/sign_email_ed"
+        app:layout_constraintTop_toBottomOf="@+id/sign_title_tv" />
 </androidx.constraintlayout.widget.ConstraintLayout>
