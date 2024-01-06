@@ -3,9 +3,15 @@ package com.dimthomas.bulletinboard.accounthelper
 import android.widget.Toast
 import com.dimthomas.bulletinboard.MainActivity
 import com.dimthomas.bulletinboard.R
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 
 class AccountHelper(private val activity: MainActivity) {
+
+    private lateinit var signInClient: GoogleSignInClient
 
     fun signUpWithEmail(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
@@ -32,6 +38,28 @@ class AccountHelper(private val activity: MainActivity) {
         }
     }
 
+    private fun getSignInClient(): GoogleSignInClient {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(activity.getString(com.firebase.ui.auth.R.string.default_web_client_id))
+            .build()
+        return GoogleSignIn.getClient(activity, gso)
+    }
+
+    fun signInWithGoogle() {
+        signInClient = getSignInClient()
+        val intent = signInClient.signInIntent
+        activity.startActivityForResult(intent, SIGN_IN_REQUEST_CODE)
+    }
+
+    fun signInFirebaseWithGoogle(token: String) {
+        val credential = GoogleAuthProvider.getCredential(token, null)
+        activity.mAuth.signInWithCredential(credential).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(activity, "Sign in done", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun sendEmailVerification(user: FirebaseUser) {
         user.sendEmailVerification().addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -40,5 +68,9 @@ class AccountHelper(private val activity: MainActivity) {
                 Toast.makeText(activity, activity.resources.getString(R.string.send_verification_email_error), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    companion object {
+        const val SIGN_IN_REQUEST_CODE = 132
     }
 }
