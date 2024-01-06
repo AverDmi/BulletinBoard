@@ -14,6 +14,7 @@ class DialogHelper(private val activity: MainActivity) {
         val builder = AlertDialog.Builder(activity)
         val binding = SignDialogBinding.inflate(activity.layoutInflater)
         builder.setView(binding.root)
+
         if (index == SIGN_UP_STATE) {
             binding.signTitleTv.text = activity.resources.getString(R.string.sign_up)
             binding.signUpInBtn.text = activity.resources.getString(R.string.sign_up_action)
@@ -21,17 +22,25 @@ class DialogHelper(private val activity: MainActivity) {
             binding.signTitleTv.text = activity.resources.getString(R.string.sign_in)
             binding.signUpInBtn.text = activity.resources.getString(R.string.sign_in_action)
         }
+
+        val dialog = builder.create()
+
         binding.signUpInBtn.setOnClickListener {
+            dialog.dismiss()
             if (index == SIGN_UP_STATE) {
                 accHelper.signUpWithEmail(
                     binding.signEmailEd.text.toString(),
                     binding.signPasswordEd.text.toString()
                 )
             } else {
-
+                accHelper.signInWithEmail(
+                    binding.signEmailEd.text.toString(),
+                    binding.signPasswordEd.text.toString()
+                )
             }
         }
-        builder.show()
+
+        dialog.show()
     }
 
     companion object {
