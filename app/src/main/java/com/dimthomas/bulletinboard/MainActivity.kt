@@ -4,11 +4,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import com.dimthomas.bulletinboard.accounthelper.AccountHelper.Companion.SIGN_IN_REQUEST_CODE
+import com.dimthomas.bulletinboard.act.EditAdsActivity
 import com.dimthomas.bulletinboard.databinding.ActivityMainBinding
 import com.dimthomas.bulletinboard.dialoghelper.DialogHelper
 import com.dimthomas.bulletinboard.dialoghelper.DialogHelper.Companion.SIGN_IN_STATE
@@ -31,6 +33,19 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         init()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.new_ads) {
+            val intent = Intent(this, EditAdsActivity::class.java)
+            startActivity(intent)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -57,6 +72,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
 
     private fun init() {
 
+        setSupportActionBar(binding.mainContent.toolbar)
         val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.mainContent.toolbar, R.string.open, R.string.close)
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
@@ -88,6 +104,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
             R.id.sign_out -> {
                 uiUpdate(null)
                 mAuth.signOut()
+                dialogHelper.accHelper.signOutGoogle()
             }
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)

@@ -28,6 +28,7 @@ class DialogHelper(private val activity: MainActivity) {
         }
         binding.googleSignInBtn.setOnClickListener {
             accHelper.signInWithGoogle()
+            dialog.dismiss()
         }
 
         dialog.show()
