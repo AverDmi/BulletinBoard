@@ -7,6 +7,7 @@ import java.io.InputStream
 import java.util.Locale
 
 object CityHelper {
+
     fun getAllCountries(context: Context): ArrayList<String> {
         var tempArray = ArrayList<String>()
         try {
@@ -24,6 +25,25 @@ object CityHelper {
             }
 
 
+        } catch (e: IOException) {
+
+        }
+        return tempArray
+    }
+
+    fun getAllCities(country: String, context: Context): ArrayList<String> {
+        var tempArray = ArrayList<String>()
+        try {
+            val inputStream: InputStream = context.assets.open("countriesToCities.json")
+            val size: Int = inputStream.available()
+            val bytesArray = ByteArray(size)
+            inputStream.read(bytesArray)
+            val jsonFile = String(bytesArray)
+            val jsonObject = JSONObject(jsonFile)
+            val cityNames = jsonObject.getJSONArray(country)
+            for (n in 0 until cityNames.length()) {
+                tempArray.add(cityNames.getString(n))
+            }
         } catch (e: IOException) {
 
         }
