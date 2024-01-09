@@ -8,10 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dimthomas.bulletinboard.R
+import com.dimthomas.bulletinboard.utils.ItemTouchMoveCallback
 
-class SelectImageRvAdapter: RecyclerView.Adapter<SelectImageRvAdapter.ImageHolder>() {
+class SelectImageRvAdapter: RecyclerView.Adapter<SelectImageRvAdapter.ImageHolder>(),  ItemTouchMoveCallback.ItemTouchAdapter{
 
-    private val mainArray = ArrayList<SelectImageItem>()
+    val mainArray = ArrayList<SelectImageItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.select_image_fragment_item, parent, false)
@@ -24,6 +25,13 @@ class SelectImageRvAdapter: RecyclerView.Adapter<SelectImageRvAdapter.ImageHolde
 
     override fun onBindViewHolder(holder: ImageHolder, position: Int) {
         holder.setData(mainArray[position])
+    }
+
+    override fun onMove(startPosition: Int, targetPosition: Int) {
+        val targetItem = mainArray[targetPosition]
+        mainArray[targetPosition] = mainArray[startPosition]
+        mainArray[startPosition] = targetItem
+        notifyItemMoved(startPosition, targetPosition)
     }
 
     class ImageHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -42,4 +50,6 @@ class SelectImageRvAdapter: RecyclerView.Adapter<SelectImageRvAdapter.ImageHolde
         mainArray.addAll(newList)
         notifyDataSetChanged()
     }
+
+
 }
