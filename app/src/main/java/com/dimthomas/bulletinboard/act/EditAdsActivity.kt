@@ -34,7 +34,13 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_GET_IMAGES) {
             if (data != null) {
-                val returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
+                val returnValues = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
+                if (returnValues?.size!! > 1) {
+                    binding.mainScrollView.visibility = View.GONE
+                    val fm = supportFragmentManager.beginTransaction()
+                    fm.replace(R.id.place_holder, ImageListFragment(this, returnValues))
+                    fm.commit()
+                }
             }
         }
     }
@@ -80,10 +86,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     }
 
     fun onClickGetImages(view: View) {
-        binding.mainScrollView.visibility = View.GONE
-        val fm = supportFragmentManager.beginTransaction()
-        fm.replace(R.id.place_holder, ImageListFragment(this))
-        fm.commit()
+        ImagePicker.getImages(this, 3)
     }
 
     override fun onFragmentClose() {
