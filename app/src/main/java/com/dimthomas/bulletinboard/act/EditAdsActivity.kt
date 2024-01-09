@@ -10,13 +10,15 @@ import android.widget.Toast
 import com.dimthomas.bulletinboard.R
 import com.dimthomas.bulletinboard.databinding.ActivityEditAdsBinding
 import com.dimthomas.bulletinboard.dialogs.DialogSpinnerHelper
+import com.dimthomas.bulletinboard.fragments.FragmentCloseInterface
+import com.dimthomas.bulletinboard.fragments.ImageListFragment
 import com.dimthomas.bulletinboard.utils.CityHelper
 import com.dimthomas.bulletinboard.utils.ImagePicker
 import com.dimthomas.bulletinboard.utils.ImagePicker.REQUEST_CODE_GET_IMAGES
 import com.fxn.pix.Pix
 import com.fxn.utility.PermUtil
 
-class EditAdsActivity : AppCompatActivity() {
+class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
     lateinit var binding: ActivityEditAdsBinding
     private val dialog = DialogSpinnerHelper()
@@ -45,7 +47,7 @@ class EditAdsActivity : AppCompatActivity() {
         when(requestCode) {
             PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    ImagePicker.getImages(this)
+                    ImagePicker.getImages(this, 3)
                 } else {
 
                     Toast.makeText(this, "Approve permissions to open Pix ImagePicker", Toast.LENGTH_SHORT).show()
@@ -78,6 +80,13 @@ class EditAdsActivity : AppCompatActivity() {
     }
 
     fun onClickGetImages(view: View) {
-        ImagePicker.getImages(this)
+        binding.mainScrollView.visibility = View.GONE
+        val fm = supportFragmentManager.beginTransaction()
+        fm.replace(R.id.place_holder, ImageListFragment(this))
+        fm.commit()
+    }
+
+    override fun onFragmentClose() {
+        binding.mainScrollView.visibility = View.VISIBLE
     }
 }
