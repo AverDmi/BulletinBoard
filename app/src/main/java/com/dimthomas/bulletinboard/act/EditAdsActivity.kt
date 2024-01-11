@@ -8,10 +8,12 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.dimthomas.bulletinboard.R
+import com.dimthomas.bulletinboard.adapters.ImageAdapter
 import com.dimthomas.bulletinboard.databinding.ActivityEditAdsBinding
 import com.dimthomas.bulletinboard.dialogs.DialogSpinnerHelper
 import com.dimthomas.bulletinboard.fragments.FragmentCloseInterface
 import com.dimthomas.bulletinboard.fragments.ImageListFragment
+import com.dimthomas.bulletinboard.fragments.SelectImageItem
 import com.dimthomas.bulletinboard.utils.CityHelper
 import com.dimthomas.bulletinboard.utils.ImagePicker
 import com.dimthomas.bulletinboard.utils.ImagePicker.REQUEST_CODE_GET_IMAGES
@@ -22,6 +24,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
     lateinit var binding: ActivityEditAdsBinding
     private val dialog = DialogSpinnerHelper()
+    private lateinit var imageAdapter: ImageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +67,8 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     }
 
     private fun init() {
-
+        imageAdapter = ImageAdapter()
+        binding.imagesVp.adapter = imageAdapter
     }
 
     fun onClickSelectCountry(view: View) {
@@ -89,7 +93,8 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         ImagePicker.getImages(this, 3)
     }
 
-    override fun onFragmentClose() {
+    override fun onFragmentClose(list: ArrayList<SelectImageItem>) {
         binding.mainScrollView.visibility = View.VISIBLE
+        imageAdapter.update(list)
     }
 }
