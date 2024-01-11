@@ -22,6 +22,7 @@ import com.fxn.utility.PermUtil
 
 class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
+    private var chooseImageFragment: ImageListFragment? = null
     lateinit var binding: ActivityEditAdsBinding
     private val dialog = DialogSpinnerHelper()
     private lateinit var imageAdapter: ImageAdapter
@@ -38,11 +39,14 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_GET_IMAGES) {
             if (data != null) {
                 val returnValues = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
-                if (returnValues?.size!! > 1) {
+                if (returnValues?.size!! > 1 && chooseImageFragment == null) {
+                    chooseImageFragment = ImageListFragment(this, returnValues)
                     binding.mainScrollView.visibility = View.GONE
                     val fm = supportFragmentManager.beginTransaction()
-                    fm.replace(R.id.place_holder, ImageListFragment(this, returnValues))
+                    fm.replace(R.id.place_holder, chooseImageFragment!!)
                     fm.commit()
+                } else if (chooseImageFragment != null) {
+                    chooseImageFragment?.updateAdapter(returnValues)
                 }
             }
         }
@@ -53,13 +57,17 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        when(requestCode) {
+        when (requestCode) {
             PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     ImagePicker.getImages(this, 3)
                 } else {
 
-                    Toast.makeText(this, "Approve permissions to open Pix ImagePicker", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Approve permissions to open Pix ImagePicker",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 return
             }
@@ -96,5 +104,6 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     override fun onFragmentClose(list: ArrayList<SelectImageItem>) {
         binding.mainScrollView.visibility = View.VISIBLE
         imageAdapter.update(list)
+        chooseImageFragment = null
     }
 }
