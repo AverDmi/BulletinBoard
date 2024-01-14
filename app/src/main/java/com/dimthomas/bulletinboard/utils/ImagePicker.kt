@@ -8,10 +8,11 @@ object ImagePicker {
 
     const val MAX_IMAGE_COUNT = 3
     const val REQUEST_CODE_GET_IMAGES = 999
+    const val REQUEST_CODE_GET_SINGLE_IMAGE = 998
 
-    fun getImages(context: AppCompatActivity, imageCounter:Int) {
+    fun getImages(context: AppCompatActivity, imageCounter:Int, rCode: Int) {
         val options = Options.init()
-            .setRequestCode(REQUEST_CODE_GET_IMAGES)
+            .setRequestCode(rCode)
             .setCount(imageCounter)
             .setFrontfacing(false)
             .setMode(Options.Mode.Picture)

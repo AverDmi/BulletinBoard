@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dimthomas.bulletinboard.R
 import com.dimthomas.bulletinboard.databinding.ListImageFragmentBinding
 import com.dimthomas.bulletinboard.utils.ImagePicker
+import com.dimthomas.bulletinboard.utils.ImagePicker.REQUEST_CODE_GET_IMAGES
 import com.dimthomas.bulletinboard.utils.ItemTouchMoveCallback
 
 class ImageListFragment(private val fragmentCloseInterface: FragmentCloseInterface, private val newList: ArrayList<String>): Fragment() {
@@ -37,11 +38,7 @@ class ImageListFragment(private val fragmentCloseInterface: FragmentCloseInterfa
         binding.selectImageRv.layoutManager = LinearLayoutManager(activity)
         binding.selectImageRv.adapter = adapter
         touchHelper.attachToRecyclerView(binding.selectImageRv)
-        val updateList = ArrayList<SelectImageItem>()
-        for (n in 0 until newList.size) {
-            updateList.add(SelectImageItem(n.toString(), newList[n]))
-        }
-        adapter.updateAdapter(updateList, true)
+        adapter.updateAdapter(newList, true)
     }
 
     override fun onDetach() {
@@ -65,16 +62,17 @@ class ImageListFragment(private val fragmentCloseInterface: FragmentCloseInterfa
 
         addImageItem.setOnMenuItemClickListener {
             val imageCount = ImagePicker.MAX_IMAGE_COUNT - adapter.mainArray.size
-            ImagePicker.getImages(activity as AppCompatActivity, imageCount)
+            ImagePicker.getImages(activity as AppCompatActivity, imageCount, REQUEST_CODE_GET_IMAGES)
             true
         }
     }
 
     fun updateAdapter(newList: ArrayList<String>) {
-        val updateList = ArrayList<SelectImageItem>()
-        for (n in adapter.mainArray.size until newList.size + adapter.mainArray.size) {
-            updateList.add(SelectImageItem(n.toString(), newList[n - adapter.mainArray.size]))
-        }
-        adapter.updateAdapter(updateList, false)
+        adapter.updateAdapter(newList, false)
+    }
+
+    fun setSingleImage(uri: String, position: Int) {
+        adapter.mainArray[position] = uri
+        adapter.notifyDataSetChanged()
     }
 }
