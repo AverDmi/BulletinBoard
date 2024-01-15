@@ -1,6 +1,7 @@
 package com.dimthomas.bulletinboard.fragments
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,7 @@ import com.dimthomas.bulletinboard.utils.ItemTouchMoveCallback
 
 class SelectImageRvAdapter: RecyclerView.Adapter<SelectImageRvAdapter.ImageHolder>(),  ItemTouchMoveCallback.ItemTouchAdapter{
 
-    val mainArray = ArrayList<String>()
+    val mainArray = ArrayList<Bitmap>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.select_image_fragment_item, parent, false)
@@ -53,7 +54,7 @@ class SelectImageRvAdapter: RecyclerView.Adapter<SelectImageRvAdapter.ImageHolde
         lateinit var editImageIb: ImageButton
         lateinit var deleteImageIb: ImageButton
 
-        fun setData(item: String) {
+        fun setData(bitMap: Bitmap) {
 
             titleTv = itemView.findViewById(R.id.title_tv)
             image = itemView.findViewById(R.id.imageContent)
@@ -75,11 +76,11 @@ class SelectImageRvAdapter: RecyclerView.Adapter<SelectImageRvAdapter.ImageHolde
             }
 
             titleTv.text = context.resources.getStringArray(R.array.title_array)[adapterPosition]
-            image.setImageURI(Uri.parse(item))
+            image.setImageBitmap(bitMap)
         }
     }
 
-    fun updateAdapter(newList: List<String>, needClear: Boolean) {
+    fun updateAdapter(newList: List<Bitmap>, needClear: Boolean) {
         if (needClear) {
             mainArray.clear()
         }

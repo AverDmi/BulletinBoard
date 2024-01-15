@@ -1,7 +1,9 @@
 package com.dimthomas.bulletinboard.utils
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.exifinterface.media.ExifInterface
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -9,7 +11,7 @@ import java.io.File
 
 object ImageManager {
 
-    const val MAX_IMAGE_SIZE = 1000
+    private const val MAX_IMAGE_SIZE = 1000
 
     fun getImageSize(uri: String): List<Int> {
 
@@ -31,18 +33,23 @@ object ImageManager {
 
         val imageFile = File(uri)
         val exif = ExifInterface(imageFile.absolutePath)
-        val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-        rotation = if (orientation == ExifInterface.ORIENTATION_ROTATE_90 || orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-            90
-        } else {
-            0
-        }
+        val orientation =
+            exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+        rotation =
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_90 || orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+                90
+            } else {
+                0
+            }
 
         return rotation
     }
 
-    suspend fun imageResize(uris: List<String>):  String = withContext(Dispatchers.IO) {
+    suspend fun imageResize(uris: List<String>): List<Bitmap> = withContext(Dispatchers.IO) {
+
         val tempList = ArrayList<List<Int>>()
+        val bitmapList = ArrayList<Bitmap>()
+
         for (n in uris.indices) {
 
             val size = getImageSize(uris[n])
@@ -62,6 +69,14 @@ object ImageManager {
                 }
             }
         }
-        return@withContext "Done"
+
+        for (i in uris.indices) {
+            bitmapList.add(
+                Picasso.get().load(File(uris[i])).resize(tempList[i][0], tempList[i][1]).get()
+            )
+        }
+
+
+        return@withContext bitmapList
     }
 }

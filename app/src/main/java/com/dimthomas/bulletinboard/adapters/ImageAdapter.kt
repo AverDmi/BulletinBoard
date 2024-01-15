@@ -1,5 +1,6 @@
 package com.dimthomas.bulletinboard.adapters
 
+import android.graphics.Bitmap
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dimthomas.bulletinboard.R
 
 class ImageAdapter: RecyclerView.Adapter<ImageAdapter.ImageHolder>() {
-    val mainArray = ArrayList<String>()
+    val mainArray = ArrayList<Bitmap>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.image_adapter_item, parent, false)
@@ -28,14 +29,14 @@ class ImageAdapter: RecyclerView.Adapter<ImageAdapter.ImageHolder>() {
 
         private lateinit var itemIv: ImageView
 
-        fun setData(uri: String) {
+        fun setData(bitMap: Bitmap) {
             itemIv = itemView.findViewById(R.id.item_iv)
-            itemIv.setImageURI(Uri.parse(uri))
+            itemIv.setImageBitmap(bitMap)
         }
 
     }
 
-    fun update(newList: ArrayList<String>) {
+    fun update(newList: ArrayList<Bitmap>) {
         mainArray.clear()
         mainArray.addAll(newList)
         notifyDataSetChanged()
